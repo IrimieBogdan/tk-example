@@ -11,12 +11,13 @@
   (:require [clojure.tools.logging :as log]
             [compojure.core :as compojure]
             [example.example-web-core :as web-core]
+            [example.example-increment-controller :as increment-controller]
             [puppetlabs.trapperkeeper.core :as trapperkeeper]
             [puppetlabs.trapperkeeper.services :as tk-services]))
 
 ;; Define a trapperkeeper service called `hello-web-service`
 (trapperkeeper/defservice hello-web-service
-  ;; 1: Docstring
+  ;; 1: Docstringfv
   "Hello web service"
   ;; ---
   ;; 2: Protocol
@@ -52,13 +53,26 @@
         this
         ;; Designate the app method from the web service as the handler for
         ;; any requests on the route for our url prefix ("/hello/...").
-        (compojure/context url-prefix []
+        (compojure/context "/greeting" []
           ;; This app method requires a service context as the argument
           ;; Use trapperkeeper's get-service method to fetch the example
           ;; service from the trapperkeeper app by its protocol name:
           (web-core/app (tk-services/get-service this :HelloService))))
+
+      (add-ring-handler
+        this
+        ;; Designate the app method from the web service as the handler for
+        ;; any requests on the route for our url prefix ("/hello/...").
+        (compojure/context "/increment" []
+          ;; This app method requires a service context as the argument
+          ;; Use trapperkeeper's get-service method to fetch the example
+          ;; service from the trapperkeeper app by its protocol name:
+          (increment-controller/increment_controller (tk-services/get-service this :IncrementService))))
+
       ;; Also store the current URL prefix in the context
-      (assoc context :url-prefix url-prefix)))
+      ;(assoc context :url-prefix url-prefix)
+      context
+      ))
 
   (start [this context]
          ;; All this start method does is print a notice.
@@ -75,8 +89,12 @@
                ;; Like the init method, this call to get-route looks up the
                ;; "/hello/" url prefix configured in config.conf
                url-prefix (get-route this)]
-              (log/infof "Hello web service started; visit http://%s:%s%s/world to check it out!"
+              (log/infof "Hello web service started; visit http://%s:%s%s to check it out!"
                          host port url-prefix))
          context))
 
 ;; Note this service doesn't implement stop, there would be nothing to do there.
+
+; http://localhost:8080/increment/11
+; http://localhost:8080/greeting/hello/bogdan
+; http://localhost:8080/greeting/bye/bogdan

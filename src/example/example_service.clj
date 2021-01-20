@@ -20,7 +20,9 @@
   ;; ...they should offer a function called `hello`, which takes
   ;; a `person` argument:
   ;; See https://clojuredocs.org/clojure.core/defprotocol.
-  (hello [this person]))
+  (hello [this person])
+  (bye [this person])
+  )
 
 ;; trapperkeeper/defservice defines a new service. It accepts:
 ;; - an optional protocol, and
@@ -60,4 +62,7 @@
   ;; This functionality should be used sparingly.
   ;; - This example service exposes a hello method:
   (hello [this person]
-         (core/hello person)))
+         (core/hello person))
+
+  (bye [this person]
+       (core/bye person)))

@@ -77,13 +77,13 @@
   :repl-options {:init-ns user}
 
   ;; Makes `lein run` run the main trapperkeeper function
-  :main puppetlabs.trapperkeeper.main
+  :main ^:skip-aot puppetlabs.trapperkeeper.main
 
-  ;; Make Java classes accessible on the classpath for JRuby
-  :java-source-paths ["src/java"]
-
-  ;; Make Ruby classes accessible on the classpath for JRuby
-  :resource-paths ["src/ruby"]
+  ;;; Make Java classes accessible on the classpath for JRuby
+  ;:java-source-paths ["src/java"]
+  ;
+  ;;; Make Ruby classes accessible on the classpath for JRuby
+  ;:resource-paths ["src/ruby"]
 
   ;; Makes `lein tk` run `lein run` to start trapperkeeper and pass it the
   ;; config files in dev-resources. It also wraps the `run` command with

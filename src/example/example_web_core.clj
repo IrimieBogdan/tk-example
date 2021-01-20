@@ -18,7 +18,7 @@
   ;; This routes function defines what will happen when users access different
   ;; endpoints of the API:
   (compojure/routes
-    (compojure/GET "/:person" [person]
+    (compojure/GET "/hello/:person" [person]
       ;; When a user 'GET's the base url plus some other string (referred to as
       ;; `person`), respond as follows:
       (fn [req]
@@ -36,5 +36,16 @@
          ;; - We're passing the `person` we read from the end of the URL as the
          ;;   second argument to `hello`.
          :body    (example-service/hello service-context person)}))
+
+    (compojure/GET "/bye/:person" [person]
+      (fn [req]
+        (log/info "Handle bye request")
+        {:status 200
+         :headers {"Content-Type" "text/plain"}
+         :body (example-service/bye service-context person)
+         }
+        )
+      )
+
     ;; This helper generates a 404 for any invalid route and responds "Not Found"
     (route/not-found "Not Found")))

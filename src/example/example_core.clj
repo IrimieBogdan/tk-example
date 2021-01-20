@@ -5,3 +5,13 @@
   "Say hello to person"
   [person]
   (format "Hello, %s!" person))
+
+(defn bye
+  "Say bye to person"
+  [person]
+  (format "Bye, %s!" person))
+
+(defn incrementer
+  "Increment number"
+  [number]
+  (str (inc (Integer/parseInt number))))
